@@ -43,8 +43,9 @@ class DecisionStump():
 
 class MyAdaBoost():
     def __init__(self):
-        self.X = []
-        self.y = []
+        self.X = np.array([])
+        self.datatypes = np.array([])
+        self.y = np.array([])
         self.stumps = []
 
     def load_dataset(self, filename):
@@ -56,11 +57,37 @@ class MyAdaBoost():
             y.append( line.strip().split(',')[-1] )
         self.X = np.array(X)
         self.y = np.array(y)
+
+    def set_datatypes(self, datatype_string):
+        temp = datatype_string.split(',')
+        if len(temp) != len(self.X[0]):
+            print('error: incorrect number of datatypes')
+            return
+
+        self.datatypes = []
+
+        for char in temp:
+            if char == 'b':
+                self.datatypes.append(DataType.BINARY)
+            elif char == 'n':
+                self.datatypes.append(DataType.NUMERICAL)
+            elif char == 'c':
+                self.datatypes.append(DataType.CATEGORICAL)
+
+        self.datatypes = np.array(self.datatypes)
+
          
 
-# myclf = MyAdaBoost()
-# myclf.load_dataset('australian.csv')
-# #myclf.fit()
+myclf = MyAdaBoost()
+myclf.load_dataset('australian.csv')
+myclf.set_datatypes('c,n,n,c,c,c,n,c,c,n,c,c,n,n')
+
+#create every tree
+
+#choose the/another one with best gini index <--
+#calculate amount of say                       |
+#recalculate weights ---------------------------
+
 
 # ds = DecisionStump()
 # ds.set_datatype(DataType.CATEGORICAL)
