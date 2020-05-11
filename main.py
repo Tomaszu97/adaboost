@@ -39,75 +39,70 @@ class MyAdaBoost():
     def load_dataset(self, filename):
         X = []
         y = []
-        datafile = open(filename, encoding='utf-8')
+        datafile = open(filename, encoding="utf-8")
         for line in datafile:
-            X.append( line.strip().split(',')[:-1] )
-            y.append( line.strip().split(',')[-1] )
-        self.X = np.array(X)
-        self.y = np.array(y)
+            rowvals = line.strip().split(",")[:-1]
+            if len(X) == 0:
+                for col in range(len(rowvals)):
+                    X.append([])
 
-    def set_datatypes(self, datatype_string):
-        temp = datatype_string.split(',')
-        if len(temp) != len(self.X[0]):
-            print('error: incorrect number of datatypes')
-            return
-
-        self.datatypes = []
-        for char in temp:
-            if char == 'b':
-                self.datatypes.append(DataType.BINARY)
-            elif char == 'n':
-                self.datatypes.append(DataType.NUMERICAL)
-            elif char == 'c':
-                self.datatypes.append(DataType.CATEGORICAL)
-
-    #TODO - add weights
-    def calc_gini(self, stump, invals, outvals):
-            tp, fp, tn, fn = 0,0,0,0
-            for attr_val, label in zip(invals, outvals):                
-                if label == '0':
-                    label = False
-                else:
-                    label = True
-                if stump.dtype == DataType.BINARY:
-                    if attr_val == '0':
-                        attr_val = False
+            for i in range(len(X)):
+                if self.datatypes[i] == DataType.BINARY:
+                    if rowvals[i] == "0":
+                        X[i].append(False)
                     else:
-                        attr_val = True
-                if stump.dtype == DataType.NUMERICAL:
-                    attr_val = float(attr_val)
+                        X[i].append(True)
 
-                if stump.dtype == DataType.CATEGORICAL:
-                    attr_val = int(attr_val)
+                elif self.datatypes[i] == DataType.NUMERICAL:
+                    X[i].append(float(rowvals[i]))
+                elif self.datatypes[i] == DataType.CATEGORICAL:
+                    X[i].append(int(rowvals[i]))
 
-                decision = stump.decide(attr_val)
-
-                if decision == label:
-                    if decision == 0:
-                        tn += 1
-                    else:
-                        tp += 1
-                else:
-                    if decision == 0:
-                        fn += 1
-                    else:
-                        fp += 1
-
-            possum = tp + fp
-            negsum = tn + fn
-            
-            if possum == 0:
-                gini_pos_leaf = 1
+            yvalstr = line.strip().split(",")[-1]
+            if yvalstr == "0":
+                y.append(False)
             else:
-                gini_pos_leaf = 1 - (tp/(possum))**2 - (fp/(possum))**2
-            
-            if negsum == 0:
-                gini_neg_leaf = 1
+                y.append(True)
+
+        self.X = X
+        self.y = y
+        num = len(self.y)
+        _num = 1 / num
+        for i in range(num):
+            self.weights.append(_num)
+
+        datafile.close()
+
+def calc_gini(self, stump):
+        tp, fp, tn, fn = 0, 0, 0, 0
+        for attr_val, label, weight in zip(self.X[stump.column], self.y, self.weights):
+            decision = stump.decide(attr_val)
+            if decision == label:
+                if decision == 0:
+                    tn += weight
+                else:
+                    tp += weight
             else:
-                gini_neg_leaf = 1 - (tn/(negsum))**2 - (fn/(negsum))**2
-            
-            gini = ( possum*gini_pos_leaf + negsum*gini_neg_leaf ) / (possum+negsum)
-            return gini
+                if decision == 0:
+                    fn += weight
+                else:
+                    fp += weight
+
+        possum = tp + fp
+        negsum = tn + fn
+
+        if possum == 0:
+            gini_pos_leaf = 1
+        else:
+            gini_pos_leaf = 1 - (tp / (possum)) ** 2 - (fp / (possum)) ** 2
+
+        if negsum == 0:
+            gini_neg_leaf = 1
+        else:
+            gini_neg_leaf = 1 - (tn / (negsum)) ** 2 - (fn / (negsum)) ** 2
+
+        gini = (possum * gini_pos_leaf + negsum * gini_neg_leaf) / (possum + negsum)
+        return gini
 
     
 
@@ -161,16 +156,3 @@ myclf = MyAdaBoost()
 myclf.load_dataset('australian.csv')
 myclf.set_datatypes('c,n,n,c,c,c,n,c,c,n,c,c,n,n')
 myclf.pick_a_stump()
-
-
-#create every tree
-
-#choose the/another one with best gini index <--
-#calculate amount of say                       |
-#recalculate weights ---------------------------
-
-
-# ds = DecisionStump()
-# ds.set_datatype(DataType.CATEGORICAL)
-# ds.set_categories([3,5,6,8])
-# print(ds.decide(9))
