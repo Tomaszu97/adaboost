@@ -1,3 +1,16 @@
+#from timeit import default_timer as timer
+# lasttime = timer()
+# tottime = timer()
+# global lasttime
+# lasttime = timer()
+# global tottime
+# tottime += timer() - lasttime               
+#print(f'TIMER={tottime}')
+
+
+
+
+
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn import datasets
