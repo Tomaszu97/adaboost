@@ -1,4 +1,5 @@
 # AdaBoost  
+[![Run on Repl.it](https://repl.it/badge/github/Tomaszu97/adaboost)](https://repl.it/github/Tomaszu97/adaboost)
 University project. Our own implementation of the AdaBoost algorithm and comparison with other methods of classification.
 
 # Contents  
