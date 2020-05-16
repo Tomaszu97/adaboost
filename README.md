@@ -7,5 +7,7 @@ University project. Our own implementation of the AdaBoost algorithm and compari
 `datasets-types` - folder containing description of data types in datasets columns  
 `mylib` - folder containing out own implementation of AdaBoost  
 `main.py` - Comparison between our implementation and Scikit's  
+`combined-testall.py` - Comparison using many datasets at once (takes forever to finish)
+
 
 Just run `main.py`. Output is in markdown, you can paste it in any markdown editor.
