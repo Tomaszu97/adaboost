@@ -23,8 +23,8 @@ from sklearn.tree import export_text
 
 
 # CONFIG
-n_stumps = 5
-n_folds = 5
+n_stumps = 3
+n_folds = 2
 my_ada_verbose = True
 datasets = ["wdbc"]
 # /CONFIG

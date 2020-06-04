@@ -11,16 +11,16 @@ from sklearn.tree import export_text
 
 ### WARNING ###
 # THIS COMPREHENSIVE TEST IS VERY SLOW
+# IF YOU RUN ALL AT ONCE
 # MIGHT TAKE OVER 24H TO FINISH
-# CHECK main.py FOR SINGLE COMPARISON
-# SERIOUSLY, DONT USE IT
+# JUST RUN SINGLE DATASET AT A TIME
 
 # CONFIG
 n_stumps = 5
 n_folds = 5
 my_ada_verbose = True
-# datasets = ["australian", "agaricus-lepiota", "tic-tac-toe", "connect4", "spambase", "wdbc"]
-datasets = [f"gen_{i}feat" for i in range(10, 25)]
+# datasets = ["australian", "agaricus-lepiota", "tic-tac-toe", "connect4", "spambase", "wdbc", "breastcan", "heart", "german"]
+datasets = ["german"]
 # /CONFIG
 
 
